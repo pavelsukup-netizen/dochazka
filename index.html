@@ -1,12 +1,13 @@
 <!doctype html>
 <html lang="cs">
 <head>
-  <link rel="manifest" href="./manifest.webmanifest">
-<meta name="theme-color" content="#4f46e5">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>MERCHANDISER LOG</title>
+
+  <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#4f46e5" />
+
   <style>
     :root{
       --bg:#eef2f7;
@@ -15,21 +16,28 @@
       --text:#0f172a;
       --muted:#64748b;
 
-      --brand:#4f46e5;      /* fialová hlavička */
+      --brand:#4f46e5;
       --brandDark:#4338ca;
 
-      --btnGreen:#16a34a;
-      --btnGreenDark:#15803d;
+      --green:#16a34a;
+      --greenDark:#15803d;
 
-      --btnGray:#9ca3af;
-      --btnGrayDark:#6b7280;
+      --red:#ef4444;
+      --redDark:#dc2626;
 
-      --btnNavy:#1f2937;
-      --btnNavyDark:#111827;
+      --blue:#60a5fa;      /* světle modrá */
+      --blueDark:#3b82f6;
 
-      --pill:#1e293b;
+      --yellow:#fbbf24;    /* žlutá */
+      --yellowDark:#f59e0b;
+
+      --gray:#9ca3af;
+      --grayDark:#6b7280;
+
+      --navy:#111827;
+      --navyDark:#0b1220;
+
       --line:#e5e7eb;
-
       --radius:18px;
     }
 
@@ -42,11 +50,7 @@
       justify-content:center;
       padding:24px 14px;
     }
-
-    .phone {
-      width: min(430px, 100%);
-    }
-
+    .phone{ width:min(430px, 100%); }
     .card{
       background: var(--card);
       border-radius: 22px;
@@ -54,28 +58,19 @@
       overflow:hidden;
       border: 1px solid rgba(15,23,42,.06);
     }
-
     .header{
       background: var(--brand);
       padding: 22px 18px 18px;
       text-align:center;
       color:#fff;
     }
-
     .title{
       font-weight: 900;
       letter-spacing: .5px;
       font-size: 22px;
       margin:0 0 8px;
     }
-
-    .now{
-      margin:0;
-      opacity:.95;
-      font-weight: 700;
-      font-size: 14px;
-    }
-
+    .now{ margin:0; opacity:.95; font-weight: 700; font-size: 14px; }
     .pill{
       display:inline-block;
       margin-top: 12px;
@@ -89,10 +84,7 @@
       text-transform: uppercase;
     }
 
-    .content{
-      padding: 16px 18px 18px;
-    }
-
+    .content{ padding: 16px 18px 18px; }
     .sectionTitle{
       font-size: 12px;
       font-weight: 900;
@@ -101,12 +93,7 @@
       margin: 10px 2px 10px;
       text-transform: uppercase;
     }
-
-    .row{
-      display:flex;
-      gap: 14px;
-    }
-
+    .row{ display:flex; gap: 14px; }
     .btn{
       border:0;
       border-radius: 12px;
@@ -123,29 +110,27 @@
     .btn:active{ transform: scale(.99); }
     .btn[disabled]{ opacity:.45; cursor:not-allowed; box-shadow:none; }
 
-    .green{ background: var(--btnGreen); }
-    .green:hover{ filter: brightness(.98); }
-    .green:active{ background: var(--btnGreenDark); }
+    .green{ background: var(--green); }
+    .green:active{ background: var(--greenDark); }
 
-    .gray{ background: var(--btnGray); }
-    .gray:active{ background: var(--btnGrayDark); }
+    .red{ background: var(--red); }
+    .red:active{ background: var(--redDark); }
 
-    .navy{ background: var(--btnNavy); }
-    .navy:active{ background: var(--btnNavyDark); }
+    .blue{ background: var(--blue); color:#0b1220; }
+    .blue:active{ background: var(--blueDark); color:#fff; }
 
-    .divider{
-      height:1px;
-      background: var(--line);
-      margin: 14px 0;
-    }
+    .yellow{ background: var(--yellow); color:#0b1220; }
+    .yellow:active{ background: var(--yellowDark); color:#fff; }
 
-    .fieldRow{
-      display:flex;
-      gap: 12px;
-      align-items:center;
-      margin-top: 6px;
-    }
+    .gray{ background: var(--gray); }
+    .gray:active{ background: var(--grayDark); }
 
+    .navy{ background: var(--navy); }
+    .navy:active{ background: var(--navyDark); }
+
+    .divider{ height:1px; background: var(--line); margin: 14px 0; }
+
+    .fieldRow{ display:flex; gap: 12px; align-items:center; margin-top: 6px; }
     .input{
       width:100%;
       border-radius: 12px;
@@ -160,17 +145,6 @@
       box-shadow: 0 0 0 3px rgba(79,70,229,.15);
     }
 
-    .metaRow{
-      display:flex;
-      gap: 10px;
-      align-items:center;
-      justify-content:space-between;
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 700;
-    }
-
     .status{
       padding: 10px 12px;
       background: #f8fafc;
@@ -178,14 +152,10 @@
       border-radius: 14px;
       font-size: 12px;
       color: #334155;
-      font-weight: 700;
+      font-weight: 800;
     }
 
-    .activity{
-      margin-top: 10px;
-      padding-bottom: 6px;
-    }
-
+    .activity{ margin-top: 10px; padding-bottom: 6px; }
     .item{
       border: 1px solid #e7edf6;
       background: #fbfdff;
@@ -193,14 +163,7 @@
       padding: 10px 12px;
       margin-top: 8px;
     }
-
-    .itemTop{
-      display:flex;
-      justify-content:space-between;
-      gap: 12px;
-      align-items:flex-start;
-    }
-
+    .itemTop{ display:flex; justify-content:space-between; gap: 12px; align-items:flex-start; }
     .tag{
       font-weight: 900;
       font-size: 12px;
@@ -210,47 +173,64 @@
       color: var(--brandDark);
       white-space:nowrap;
     }
-
-    .itemTitle{
-      font-weight: 900;
-      font-size: 14px;
-      margin:0;
-    }
-
-    .itemSub{
-      margin: 4px 0 0;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 700;
-    }
+    .itemTitle{ font-weight: 900; font-size: 14px; margin:0; }
+    .itemSub{ margin: 4px 0 0; color: var(--muted); font-size: 12px; font-weight: 800; }
 
     .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
-    .tiny{ font-size: 11px; color: var(--muted); font-weight: 700; }
+    .tiny{ font-size: 11px; color: var(--muted); font-weight: 800; }
 
-    .exportBar{
-      display:flex;
-      gap: 10px;
-      align-items:center;
-      margin-top: 8px;
-    }
-
+    .exportBar{ display:flex; gap: 10px; align-items:center; margin-top: 8px; }
     .month{
       width: 150px;
       min-width: 150px;
       border-radius: 12px;
       border: 1px solid #d8dee9;
       padding: 12px 10px;
-      font-weight: 800;
+      font-weight: 900;
       font-size: 13px;
       background:#fff;
-      color: var(--text);
+      color:var(--text);
       outline:none;
     }
 
-    .icon{
-      display:inline-block;
-      transform: translateY(1px);
-      margin-right: 8px;
+    /* MODAL */
+    .modalBack{
+      position: fixed; inset:0;
+      background: rgba(15,23,42,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 9999;
+    }
+    .modal{
+      width: min(420px, 100%);
+      background:#fff;
+      border-radius: 18px;
+      box-shadow: 0 30px 70px rgba(0,0,0,.22);
+      overflow:hidden;
+      border: 1px solid rgba(15,23,42,.08);
+    }
+    .modalHead{
+      padding: 14px 14px 10px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e7edf6;
+      font-weight: 1000;
+    }
+    .modalBody{ padding: 14px; }
+    .modalMsg{
+      margin:0;
+      font-size: 14px;
+      font-weight: 800;
+      color:#0f172a;
+      line-height: 1.4;
+    }
+    .modalActions{
+      display:flex;
+      gap: 10px;
+      padding: 14px;
+      border-top: 1px solid #e7edf6;
+      background: #fff;
     }
   </style>
 </head>
@@ -268,30 +248,26 @@
         <div class="sectionTitle">PRACOVNÍ SMĚNA</div>
         <div class="row">
           <button class="btn green" id="btnShiftStart">PŘÍCHOD</button>
-          <button class="btn gray" id="btnShiftEnd">ODCHOD</button>
+          <button class="btn red" id="btnShiftEnd">ODCHOD</button>
         </div>
 
         <div class="divider"></div>
 
         <div class="sectionTitle">NÁVŠTĚVA PRODEJNY</div>
-
         <div class="fieldRow">
           <input class="input" id="storeName" placeholder="Název prodejny (např. Albert Anděl)" />
         </div>
 
         <div style="height:10px"></div>
-
         <div class="row">
-          <button class="btn gray" id="btnStoreIn">VSTUP NA<br/>PRODEJNU</button>
-          <button class="btn gray" id="btnStoreOut">ODCHOD Z<br/>PRODEJNY</button>
+          <button class="btn blue" id="btnStoreIn">VSTUP NA<br/>PRODEJNU</button>
+          <button class="btn yellow" id="btnStoreOut">ODCHOD Z<br/>PRODEJNY</button>
         </div>
 
         <div class="divider"></div>
 
         <div class="exportBar">
-          <button class="btn navy" id="btnExport">
-            <span class="icon">⬇</span>Stáhnout přehled (CSV)
-          </button>
+          <button class="btn navy" id="btnExport">⬇ Stáhnout přehled (CSV)</button>
           <input class="month" id="monthPick" type="month" />
         </div>
 
@@ -310,17 +286,30 @@
     </div>
   </div>
 
+  <!-- Modal -->
+  <div class="modalBack" id="modalBack" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modalHead" id="modalTitle">Potvrzení</div>
+      <div class="modalBody">
+        <p class="modalMsg" id="modalMsg">--</p>
+      </div>
+      <div class="modalActions">
+        <button class="btn green" id="modalYes">ANO</button>
+        <button class="btn red" id="modalNo">NE</button>
+      </div>
+    </div>
+  </div>
+
 <script>
 (() => {
   // ------------------ STORAGE MODEL ------------------
   // localStorage KEY -> { days: { "YYYY-MM-DD": DayRecord } }
-  // DayRecord: {
-  //   shiftStart: {ts, lat, lon, acc} | null,
-  //   shiftEnd:   {ts, lat, lon, acc} | null,
-  //   visits: [ { storeName, in:{...}, out:{...}|null } ]
-  // }
+  // DayRecord: { sessions: Session[] }
+  // Session: { start: Point, end: Point|null, visits: Visit[] }
+  // Visit: { storeName, in: Point, out: Point|null }
+  // Point: { ts, lat, lon, acc }
 
-  const STORAGE_KEY = "merchandiser_log_v1";
+  const STORAGE_KEY = "merchandiser_log_v2";
 
   const elNow = document.getElementById("nowText");
   const elPill = document.getElementById("modePill");
@@ -334,6 +323,12 @@
   const btnExport = document.getElementById("btnExport");
   const inpStore = document.getElementById("storeName");
   const monthPick = document.getElementById("monthPick");
+
+  // modal
+  const modalBack = document.getElementById("modalBack");
+  const modalMsg = document.getElementById("modalMsg");
+  const modalYes = document.getElementById("modalYes");
+  const modalNo = document.getElementById("modalNo");
 
   const pad2 = (n) => String(n).padStart(2, "0");
 
@@ -369,15 +364,39 @@
   }
 
   function getDay(data, key){
-    if(!data.days[key]){
-      data.days[key] = { shiftStart:null, shiftEnd:null, visits:[] };
-    }
-    if(!Array.isArray(data.days[key].visits)) data.days[key].visits = [];
+    if(!data.days[key]) data.days[key] = { sessions: [] };
+    if(!Array.isArray(data.days[key].sessions)) data.days[key].sessions = [];
     return data.days[key];
   }
 
   function setStatus(msg){
     elStatus.textContent = "Stav: " + msg;
+  }
+
+  // ------------------ CONFIRM MODAL ------------------
+  function confirmAction(message){
+    return new Promise((resolve) => {
+      modalMsg.textContent = message;
+      modalBack.style.display = "flex";
+      modalBack.setAttribute("aria-hidden","false");
+
+      const cleanup = () => {
+        modalBack.style.display = "none";
+        modalBack.setAttribute("aria-hidden","true");
+        modalYes.onclick = null;
+        modalNo.onclick = null;
+      };
+
+      modalYes.onclick = () => { cleanup(); resolve(true); };
+      modalNo.onclick  = () => { cleanup(); resolve(false); };
+
+      // klik mimo modal = NE
+      modalBack.onclick = (e) => {
+        if(e.target === modalBack){
+          cleanup(); resolve(false);
+        }
+      };
+    });
   }
 
   // ------------------ GEO ------------------
@@ -413,17 +432,7 @@
     };
   }
 
-  // ------------------ STATE DERIVED ------------------
-  function isShiftActive(day){
-    return !!(day.shiftStart && !day.shiftEnd);
-  }
-  function activeVisit(day){
-    if(!day.visits.length) return null;
-    const last = day.visits[day.visits.length-1];
-    if(last && last.in && !last.out) return last;
-    return null;
-  }
-
+  // ------------------ HELPERS ------------------
   function minutesDiff(aTs, bTs){
     if(aTs == null || bTs == null) return null;
     if(bTs < aTs) return null;
@@ -436,19 +445,51 @@
     return `${h} h ${pad2(m)} m`;
   }
 
+  function activeSession(day){
+    const s = day.sessions;
+    if(!s.length) return null;
+    const last = s[s.length-1];
+    if(last && last.start && !last.end) return last;
+    return null;
+  }
+  function activeVisit(session){
+    if(!session) return null;
+    const v = session.visits || [];
+    if(!v.length) return null;
+    const last = v[v.length-1];
+    if(last && last.in && !last.out) return last;
+    return null;
+  }
+
+  function gpsText(p){
+    const has = (p?.lat != null && p?.lon != null);
+    if(!has) return "bez GPS";
+    const acc = (p.acc != null) ? `±${Math.round(p.acc)}m` : "±?";
+    return `${p.lat.toFixed(6)}, ${p.lon.toFixed(6)} (${acc})`;
+  }
+
+  function lockUI(lock){
+    btnShiftStart.disabled = lock;
+    btnShiftEnd.disabled = lock;
+    btnStoreIn.disabled = lock;
+    btnStoreOut.disabled = lock;
+    btnExport.disabled = lock;
+    inpStore.disabled = lock;
+    monthPick.disabled = lock;
+  }
+
   // ------------------ ACTIONS ------------------
   async function startShift(){
+    const ok = await confirmAction("Přejete si potvrdit příchod do práce?");
+    if(!ok) return;
+
     const data = load();
     const day = getDay(data, todayKey());
 
-    if(isShiftActive(day)){
-      setStatus("už jsi ve směně.");
-      return;
-    }
-    if(day.shiftStart && day.shiftEnd){
-      // nový shift stejný den? necháme to jako 1 směnu/den (typicky docházka).
-      // když chceš více směn, dá se to rozšířit – zatím radši zabráníme chaosu.
-      alert("Dnešní směna už je uzavřená. Pokud potřebuješ druhou směnu v jednom dni, řekni a rozšíříme logiku.");
+    const sActive = activeSession(day);
+    if(sActive){
+      setStatus("směna už běží (nejdřív dej odchod).");
+      render();
       return;
     }
 
@@ -456,7 +497,7 @@
     setStatus("ukládám příchod…");
 
     const p = await capturePoint();
-    day.shiftStart = { ts:p.ts, lat:p.lat, lon:p.lon, acc:p.acc };
+    day.sessions.push({ start: { ts:p.ts, lat:p.lat, lon:p.lon, acc:p.acc }, end: null, visits: [] });
     save(data);
 
     setStatus(p.geoOk ? "příchod uložen ✅ (s GPS)" : `příchod uložen ✅ (bez GPS: ${p.geoErr})`);
@@ -465,15 +506,22 @@
   }
 
   async function endShift(){
+    const ok = await confirmAction("Přejete si potvrdit odchod z práce?");
+    if(!ok) return;
+
     const data = load();
     const day = getDay(data, todayKey());
+    const s = activeSession(day);
 
-    if(!isShiftActive(day)){
-      setStatus("směna není aktivní.");
+    if(!s){
+      setStatus("žádná směna neběží.");
+      render();
       return;
     }
-    if(activeVisit(day)){
+    if(activeVisit(s)){
+      setStatus("nejdřív ukonči návštěvu prodejny.");
       alert("Nejdřív ukonči návštěvu prodejny (odchod z prodejny).");
+      render();
       return;
     }
 
@@ -481,15 +529,29 @@
     setStatus("ukládám odchod…");
 
     const p = await capturePoint();
-    day.shiftEnd = { ts:p.ts, lat:p.lat, lon:p.lon, acc:p.acc };
+    s.end = { ts:p.ts, lat:p.lat, lon:p.lon, acc:p.acc };
     save(data);
 
-    setStatus(p.geoOk ? "odchod uložen ✅ (s GPS)" : `odchod uložen ✅ (bez GPS: ${p.geoErr})`);
+    const workMin = minutesDiff(s.start?.ts, s.end?.ts);
+    setStatus(p.geoOk ? `odchod uložen ✅ (celkem ${hm(workMin)})` : `odchod uložen ✅ (bez GPS: ${p.geoErr})`);
     lockUI(false);
     render();
   }
 
   async function storeIn(){
+    const data = load();
+    const day = getDay(data, todayKey());
+    const s = activeSession(day);
+
+    if(!s){
+      alert("Nejdřív zahaj směnu (Příchod).");
+      return;
+    }
+    if(activeVisit(s)){
+      alert("Už máš aktivní návštěvu. Nejdřív dej odchod z prodejny.");
+      return;
+    }
+
     const name = (inpStore.value || "").trim();
     if(!name){
       alert("Zadej název prodejny.");
@@ -497,23 +559,15 @@
       return;
     }
 
-    const data = load();
-    const day = getDay(data, todayKey());
-
-    if(!isShiftActive(day)){
-      alert("Nejdřív zahaj směnu (Příchod).");
-      return;
-    }
-    if(activeVisit(day)){
-      alert("Už máš aktivní návštěvu. Nejdřív dej odchod z prodejny.");
-      return;
-    }
+    const ok = await confirmAction(`Přejete si potvrdit VSTUP na prodejnu?\n\nProdejna: ${name}`);
+    if(!ok) return;
 
     lockUI(true);
     setStatus("ukládám vstup na prodejnu…");
 
     const p = await capturePoint();
-    day.visits.push({
+    s.visits = Array.isArray(s.visits) ? s.visits : [];
+    s.visits.push({
       storeName: name,
       in: { ts:p.ts, lat:p.lat, lon:p.lon, acc:p.acc },
       out: null
@@ -528,17 +582,21 @@
   async function storeOut(){
     const data = load();
     const day = getDay(data, todayKey());
+    const s = activeSession(day);
 
-    if(!isShiftActive(day)){
+    if(!s){
       alert("Nejdřív zahaj směnu (Příchod).");
       return;
     }
 
-    const v = activeVisit(day);
+    const v = activeVisit(s);
     if(!v){
       alert("Žádná aktivní návštěva není otevřená.");
       return;
     }
+
+    const ok = await confirmAction(`Přejete si potvrdit ODCHOD z prodejny?\n\nProdejna: ${v.storeName || "(bez názvu)"}`);
+    if(!ok) return;
 
     lockUI(true);
     setStatus("ukládám odchod z prodejny…");
@@ -547,19 +605,10 @@
     v.out = { ts:p.ts, lat:p.lat, lon:p.lon, acc:p.acc };
     save(data);
 
-    setStatus(p.geoOk ? "odchod z prodejny uložen ✅ (s GPS)" : `odchod z prodejny uložen ✅ (bez GPS: ${p.geoErr})`);
+    const vMin = minutesDiff(v.in?.ts, v.out?.ts);
+    setStatus(p.geoOk ? `odchod uložen ✅ (návštěva ${hm(vMin)})` : `odchod uložen ✅ (bez GPS: ${p.geoErr})`);
     lockUI(false);
     render();
-  }
-
-  function lockUI(lock){
-    btnShiftStart.disabled = lock;
-    btnShiftEnd.disabled = lock;
-    btnStoreIn.disabled = lock;
-    btnStoreOut.disabled = lock;
-    btnExport.disabled = lock;
-    inpStore.disabled = lock;
-    monthPick.disabled = lock;
   }
 
   // ------------------ EXPORT CSV ------------------
@@ -568,14 +617,12 @@
     const to = new Date(y, m, 0, 23,59,59,999).getTime();
     return { from, to };
   }
-
   function parseMonthValue(v){
     if(!v) return null;
     const [y,m] = v.split("-").map(Number);
     if(!y || !m) return null;
     return { y, m };
   }
-
   function csvEscape(value, sep){
     const s = String(value ?? "");
     const needs = s.includes(sep) || s.includes('"') || s.includes("\n");
@@ -591,16 +638,14 @@
       return;
     }
 
-    const sep = ","; // chceš xlsx friendly – čárka; (když budeš chtít ; pro CZ Excel, řekni a přepnu)
+    const sep = ","; // xlsx friendly (BOM + comma)
     const { from, to } = monthRange(sel.y, sel.m);
 
-    // vyber dny v rozsahu
     const dayKeys = Object.keys(data.days || {})
       .filter(k => {
-        // k je YYYY-MM-DD, vytvoříme timestamp na začátku dne
         const [yy,mm,dd] = k.split("-").map(Number);
         if(!yy || !mm || !dd) return false;
-        const ts = new Date(yy, mm-1, dd, 12,0,0,0).getTime(); // poledne kvůli DST
+        const ts = new Date(yy, mm-1, dd, 12,0,0,0).getTime();
         return ts >= from && ts <= to;
       })
       .sort((a,b) => a.localeCompare(b));
@@ -608,14 +653,19 @@
     const head = [
       "row_type",
       "date",
-      "shift_start",
-      "shift_start_lat",
-      "shift_start_lon",
-      "shift_end",
-      "shift_end_lat",
-      "shift_end_lon",
-      "work_minutes",
-      "visit_count",
+      "day_work_minutes",
+      "day_visit_count",
+
+      "session_index",
+      "session_start",
+      "session_start_lat",
+      "session_start_lon",
+      "session_end",
+      "session_end_lat",
+      "session_end_lon",
+      "session_work_minutes",
+      "session_visit_count",
+
       "visit_index",
       "store_name",
       "store_in",
@@ -632,66 +682,109 @@
 
     for(const dk of dayKeys){
       const day = getDay(data, dk);
-      const visitCount = (day.visits || []).length;
+      const sessions = Array.isArray(day.sessions) ? day.sessions : [];
 
-      const shiftStartTs = day.shiftStart?.ts ?? null;
-      const shiftEndTs = day.shiftEnd?.ts ?? null;
-      const workMin = (shiftStartTs && shiftEndTs) ? minutesDiff(shiftStartTs, shiftEndTs) : null;
+      // totals
+      let dayWorkMin = 0;
+      let dayHasAnyEndedSession = false;
+      let dayVisitCount = 0;
 
-      // 1) řádek dne – souhrn
+      for(const s of sessions){
+        const sc = Array.isArray(s.visits) ? s.visits.length : 0;
+        dayVisitCount += sc;
+
+        if(s.start?.ts && s.end?.ts){
+          const wm = minutesDiff(s.start.ts, s.end.ts);
+          if(wm != null){
+            dayWorkMin += wm;
+            dayHasAnyEndedSession = true;
+          }
+        }
+      }
+
+      // DAY_TOTAL row
       lines.push([
         "DAY_TOTAL",
         dk,
-        shiftStartTs ? fmtDateTime(shiftStartTs) : "",
-        day.shiftStart?.lat ?? "",
-        day.shiftStart?.lon ?? "",
-        shiftEndTs ? fmtDateTime(shiftEndTs) : "",
-        day.shiftEnd?.lat ?? "",
-        day.shiftEnd?.lon ?? "",
-        workMin ?? "",
-        visitCount,
+        dayHasAnyEndedSession ? dayWorkMin : "",
+        dayVisitCount,
+
+        "",
+        "", "", "",
+        "", "", "",
+        "", "",
+
         "",
         "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        "", "", "",
+        "", "", "",
         ""
       ].map(x => csvEscape(x, sep)).join(sep));
 
-      // 2) řádky návštěv
-      for(let i=0; i<visitCount; i++){
-        const v = day.visits[i];
-        const vInTs = v?.in?.ts ?? null;
-        const vOutTs = v?.out?.ts ?? null;
-        const vMin = (vInTs && vOutTs) ? minutesDiff(vInTs, vOutTs) : null;
+      // SESSION rows + VISIT rows
+      sessions.forEach((s, si) => {
+        const sStartTs = s.start?.ts ?? null;
+        const sEndTs = s.end?.ts ?? null;
+        const sWorkMin = (sStartTs && sEndTs) ? minutesDiff(sStartTs, sEndTs) : null;
+        const vList = Array.isArray(s.visits) ? s.visits : [];
+        const sVisitCount = vList.length;
 
         lines.push([
-          "VISIT",
+          "SESSION",
           dk,
-          shiftStartTs ? fmtDateTime(shiftStartTs) : "",
-          day.shiftStart?.lat ?? "",
-          day.shiftStart?.lon ?? "",
-          shiftEndTs ? fmtDateTime(shiftEndTs) : "",
-          day.shiftEnd?.lat ?? "",
-          day.shiftEnd?.lon ?? "",
-          workMin ?? "",
-          visitCount,
-          (i+1),
-          v?.storeName ?? "",
-          vInTs ? fmtDateTime(vInTs) : "",
-          v?.in?.lat ?? "",
-          v?.in?.lon ?? "",
-          vOutTs ? fmtDateTime(vOutTs) : "",
-          v?.out?.lat ?? "",
-          v?.out?.lon ?? "",
-          vMin ?? ""
-        ].map(x => csvEscape(x, sep)).join(sep));
-      }
+          "",
+          "",
 
-      // když nejsou návštěvy, necháme jen DAY_TOTAL (to je ok)
+          (si+1),
+          sStartTs ? fmtDateTime(sStartTs) : "",
+          s.start?.lat ?? "",
+          s.start?.lon ?? "",
+          sEndTs ? fmtDateTime(sEndTs) : "",
+          s.end?.lat ?? "",
+          s.end?.lon ?? "",
+          sWorkMin ?? "",
+          sVisitCount,
+
+          "",
+          "",
+          "", "", "",
+          "", "", "",
+          ""
+        ].map(x => csvEscape(x, sep)).join(sep));
+
+        vList.forEach((v, vi) => {
+          const vInTs = v?.in?.ts ?? null;
+          const vOutTs = v?.out?.ts ?? null;
+          const vMin = (vInTs && vOutTs) ? minutesDiff(vInTs, vOutTs) : null;
+
+          lines.push([
+            "VISIT",
+            dk,
+            "",
+            "",
+
+            (si+1),
+            sStartTs ? fmtDateTime(sStartTs) : "",
+            s.start?.lat ?? "",
+            s.start?.lon ?? "",
+            sEndTs ? fmtDateTime(sEndTs) : "",
+            s.end?.lat ?? "",
+            s.end?.lon ?? "",
+            sWorkMin ?? "",
+            sVisitCount,
+
+            (vi+1),
+            v?.storeName ?? "",
+            vInTs ? fmtDateTime(vInTs) : "",
+            v?.in?.lat ?? "",
+            v?.in?.lon ?? "",
+            vOutTs ? fmtDateTime(vOutTs) : "",
+            v?.out?.lat ?? "",
+            v?.out?.lon ?? "",
+            vMin ?? ""
+          ].map(x => csvEscape(x, sep)).join(sep));
+        });
+      });
     }
 
     const csv = "\uFEFF" + lines.join("\n"); // BOM pro Excel (UTF-8)
@@ -721,68 +814,67 @@
 
     const data = load();
     const day = getDay(data, todayKey());
-    const shiftActive = isShiftActive(day);
-    const vActive = activeVisit(day);
 
-    // pill mode
-    if(!shiftActive){
-      elPill.textContent = "MIMO PRACOVNÍ DOBU";
-    } else if(shiftActive && vActive){
-      elPill.textContent = "NA PRODEJNĚ";
-    } else {
-      elPill.textContent = "VE SMĚNĚ";
-    }
+    const s = activeSession(day);
+    const v = activeVisit(s);
 
-    // buttons state
-    btnShiftStart.classList.toggle("green", !shiftActive && !day.shiftStart);
-    btnShiftStart.classList.toggle("gray", shiftActive || !!day.shiftStart);
-    btnShiftStart.disabled = shiftActive || !!day.shiftStart;
+    // pill
+    if(!s) elPill.textContent = "MIMO PRACOVNÍ DOBU";
+    else if(s && v) elPill.textContent = "NA PRODEJNĚ";
+    else elPill.textContent = "VE SMĚNĚ";
 
-    btnShiftEnd.disabled = !shiftActive;
-    btnShiftEnd.classList.toggle("gray", true);
+    // button enable logic + requested behavior
+    // Příchod: permanentně zelené, aktivní jen když není session aktivní
+    btnShiftStart.disabled = !!s;
 
-    // store buttons
-    const canStore = shiftActive;
-    btnStoreIn.disabled = !canStore || !!vActive;
-    btnStoreOut.disabled = !canStore || !vActive;
+    // Odchod: červené aktivní jen když session běží
+    btnShiftEnd.disabled = !s;
 
-    // input lock during active visit
-    inpStore.disabled = !!vActive ? true : false;
-    if(vActive) inpStore.value = vActive.storeName || inpStore.value;
+    // Store buttons:
+    btnStoreIn.disabled = !s || !!v;
+    btnStoreOut.disabled = !s || !v;
 
-    // activity view
+    // Activity view (flatten sessions + visits)
     const items = [];
 
-    if(day.shiftStart){
+    const sessions = Array.isArray(day.sessions) ? day.sessions : [];
+    sessions.forEach((sess, i) => {
       items.push({
-        tag:"SMĚNA",
-        title:"Příchod",
-        sub: `${fmtDateTime(day.shiftStart.ts)} • GPS: ${gpsText(day.shiftStart)}`
+        tag: `SMĚNA #${i+1}`,
+        title: "Příchod",
+        sub: `${sess.start?.ts ? fmtDateTime(sess.start.ts) : "—"} • GPS: ${gpsText(sess.start)}`
       });
-    }
-    if(day.visits?.length){
-      day.visits.forEach((v, idx) => {
-        const inTs = v?.in?.ts;
-        const outTs = v?.out?.ts;
+
+      const vList = Array.isArray(sess.visits) ? sess.visits : [];
+      vList.forEach((vv, j) => {
+        const inTs = vv?.in?.ts;
+        const outTs = vv?.out?.ts;
         const dur = (inTs && outTs) ? hm(minutesDiff(inTs, outTs)) : (inTs ? "probíhá…" : "");
         items.push({
-          tag:`PRODEJNA #${idx+1}`,
-          title: v.storeName || "(bez názvu)",
+          tag: `PRODEJNA ${i+1}.${j+1}`,
+          title: vv?.storeName || "(bez názvu)",
           sub: `${inTs ? fmtDateTime(inTs) : "—"} → ${outTs ? fmtDateTime(outTs) : "—"} • ${dur}`
         });
       });
-    }
-    if(day.shiftEnd){
-      const workMin = minutesDiff(day.shiftStart?.ts ?? null, day.shiftEnd.ts);
-      items.push({
-        tag:"SMĚNA",
-        title:"Odchod",
-        sub: `${fmtDateTime(day.shiftEnd.ts)} • Celkem práce: ${hm(workMin)}`
-      });
-    }
+
+      if(sess.end?.ts){
+        const w = minutesDiff(sess.start?.ts, sess.end.ts);
+        items.push({
+          tag: `SMĚNA #${i+1}`,
+          title: "Odchod",
+          sub: `${fmtDateTime(sess.end.ts)} • Celkem: ${hm(w)}`
+        });
+      } else {
+        items.push({
+          tag: `SMĚNA #${i+1}`,
+          title: "Běží…",
+          sub: "Směna není uzavřená (čeká na Odchod)."
+        });
+      }
+    });
 
     if(!items.length){
-      elActivity.innerHTML = `<div class="tiny">Zatím nic. Zahaj směnu (Příchod).</div>`;
+      elActivity.innerHTML = `<div class="tiny">Zatím nic. Klikni na PŘÍCHOD.</div>`;
     } else {
       elActivity.innerHTML = items.map(it => `
         <div class="item">
@@ -797,18 +889,11 @@
       `).join("");
     }
 
-    // měsíční picker default (když je prázdný)
+    // month default
     if(!monthPick.value){
       const n = new Date();
       monthPick.value = `${n.getFullYear()}-${pad2(n.getMonth()+1)}`;
     }
-  }
-
-  function gpsText(p){
-    const has = (p.lat != null && p.lon != null);
-    if(!has) return "bez GPS";
-    const acc = (p.acc != null) ? `±${Math.round(p.acc)}m` : "±?";
-    return `${p.lat.toFixed(6)}, ${p.lon.toFixed(6)} (${acc})`;
   }
 
   function escapeHtml(s){
@@ -819,13 +904,29 @@
       .replaceAll('"',"&quot;");
   }
 
-  // ------------------ WIRE UP ------------------
+  // ------------------ WIRE ------------------
   btnShiftStart.addEventListener("click", startShift);
   btnShiftEnd.addEventListener("click", endShift);
   btnStoreIn.addEventListener("click", storeIn);
   btnStoreOut.addEventListener("click", storeOut);
   btnExport.addEventListener("click", exportCsv);
-  monthPick.addEventListener("change", () => setStatus("měsíc vybrán."));
+
+  // service worker register + auto update
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", async () => {
+      try {
+        const reg = await navigator.serviceWorker.register("./sw.js");
+        reg.update();
+        reg.addEventListener("updatefound", () => {
+          const nw = reg.installing;
+          if(!nw) return;
+          nw.addEventListener("statechange", () => {
+            if (nw.state === "activated") location.reload();
+          });
+        });
+      } catch {}
+    });
+  }
 
   // tick
   render();
@@ -833,31 +934,5 @@
 
 })();
 </script>
- <script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", async () => {
-      try {
-        const reg = await navigator.serviceWorker.register("./sw.js");
-        // zkus vynutit update
-        reg.update();
-
-        // když přijde nová verze SW, reloadni appku
-        reg.addEventListener("updatefound", () => {
-          const newWorker = reg.installing;
-          if (!newWorker) return;
-          newWorker.addEventListener("statechange", () => {
-            if (newWorker.state === "activated") {
-              location.reload();
-            }
-          });
-        });
-      } catch (e) {}
-    });
-  }
-</script>
-
-
 </body>
 </html>
-
-
