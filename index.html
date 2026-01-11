@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Docházka</title>
+  <meta name="theme-color" content="#111827" />
+  <style>
+    :root { --bg:#0b1220; --card:#111827; --muted:#94a3b8; --text:#e5e7eb; --a:#22c55e; --b:#ef4444; --c:#38bdf8; --d:#f59e0b; }
+    *{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial}
+    body{margin:0;background:linear-gradient(180deg,#050814,#0b1220);color:var(--text)}
+    header{padding:16px 16px 8px}
+    h1{margin:0;font-size:20px}
+    p{margin:6px 0 0;color:var(--muted);font-size:13px}
+    .wrap{padding:16px;display:flex;flex-direction:column;gap:12px;max-width:720px;margin:0 auto}
+    .card{background:rgba(17,24,39,.92);border:1px solid rgba(148,163,184,.18);border-radius:16px;padding:12px}
+    .row{display:flex;gap:10px}
+    button{
+      border:0;border-radius:14px;padding:14px 12px;color:#0b1220;font-weight:700;
+      flex:1;cursor:pointer;transition:.15s transform;
+    }
+    button:active{transform:scale(.99)}
+    .arr{background:var(--a)}
+    .dep{background:var(--b)}
+    .exp{background:var(--c);flex:1.2}
+    .danger{background:var(--d)}
+    .small{font-size:12px;color:var(--muted)}
+    label{font-size:12px;color:var(--muted)}
+    input,select{
+      width:100%;padding:10px 10px;border-radius:12px;border:1px solid rgba(148,163,184,.25);
+      background:#0b1220;color:var(--text);outline:none
+    }
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:8px 6px;border-bottom:1px solid rgba(148,163,184,.15);font-size:13px;vertical-align:top}
+    th{color:var(--muted);font-weight:600;text-align:left}
+    .pill{display:inline-block;padding:4px 8px;border-radius:999px;background:rgba(148,163,184,.12);font-size:12px;color:var(--muted)}
+    .ok{color:#86efac}
+    .no{color:#fca5a5}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Docházka 📍⏱️</h1>
+    <p>Jednoduchý log příchod/odchod + GPS. Data jsou jen v telefonu (local storage).</p>
+  </header>
+
+  <div class="wrap">
+    <div class="card">
+      <div class="row">
+        <button class="arr" id="btnArrival">Příchod</button>
+        <button class="dep" id="btnDeparture">Odchod</button>
+      </div>
+      <div style="height:10px"></div>
+      <div class="row">
+        <div style="flex:1">
+          <label>Měsíc pro export</label>
+          <input type="month" id="monthPick" />
+        </div>
+        <div style="flex:1">
+          <label>CSV oddělovač</label>
+          <select id="sepPick">
+            <option value=",">Čárka (comma)</option>
+            <option value=";">Středník (často lepší pro Excel CZ)</option>
+          </select>
+        </div>
+      </div>
+      <div style="height:10px"></div>
+      <div class="row">
+        <button class="exp" id="btnExport">Export CSV (měsíční přehled)</button>
+        <button class="danger" id="btnClear" title="Smaže všechna data v telefonu">Reset dat</button>
+      </div>
+      <div style="height:10px"></div>
+      <div class="small" id="status">Stav: připraveno.</div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+        <div>
+          <div style="font-weight:700">Souhrn (vybraný měsíc)</div>
+          <div class="small">Páruje: první příchod + poslední odchod v daný den.</div>
+        </div>
+        <span class="pill" id="sumPill">0 h 00 m</span>
+      </div>
+      <div style="height:10px"></div>
+      <div style="overflow:auto">
+        <table id="summaryTbl">
+          <thead>
+            <tr>
+              <th>Datum</th>
+              <th>Příchod</th>
+              <th>Odchod</th>
+              <th>Práce</th>
+              <th>GPS</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="font-weight:700">Poslední záznamy</div>
+      <div class="small">Ukládá se: typ, čas, lat/lon, accuracy.</div>
+      <div style="height:10px"></div>
+      <div style="overflow:auto">
+        <table id="logTbl">
+          <thead>
+            <tr>
+              <th>Typ</th>
+              <th>Čas</th>
+              <th>Lat/Lon</th>
+              <th>Acc</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const KEY = "dochazka_v1_events";
+
+  const btnArrival = document.getElementById("btnArrival");
+  const btnDeparture = document.getElementById("btnDeparture");
+  const btnExport = document.getElementById("btnExport");
+  const btnClear = document.getElementById("btnClear");
+  const statusEl = document.getElementById("status");
+  const monthPick = document.getElementById("monthPick");
+  const sepPick = document.getElementById("sepPick");
+  const logTbody = document.querySelector("#logTbl tbody");
+  const sumTbody = document.querySelector("#summaryTbl tbody");
+  const sumPill = document.getElementById("sumPill");
+
+  const pad2 = n => String(n).padStart(2, "0");
+
+  function nowLocalTs() { return Date.now(); }
+
+  function fmtDate(ts) {
+    const d = new Date(ts);
+    return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+  }
+  function fmtTime(ts) {
+    const d = new Date(ts);
+    return `${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`;
+  }
+  function fmtDateTime(ts) { return `${fmtDate(ts)} ${fmtTime(ts)}`; }
+
+  function loadEvents() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      if (!raw) return [];
+      const arr = JSON.parse(raw);
+      if (!Array.isArray(arr)) return [];
+      return arr;
+    } catch { return []; }
+  }
+  function saveEvents(arr) {
+    localStorage.setItem(KEY, JSON.stringify(arr));
+  }
+
+  function setStatus(msg, kind="") {
+    statusEl.textContent = `Stav: ${msg}`;
+    statusEl.className = "small " + kind;
+  }
+
+  function getSelectedMonth() {
+    const v = monthPick.value;
+    if (!v) return null;
+    const [y,m] = v.split("-").map(Number);
+    if (!y || !m) return null;
+    return { y, m }; // m: 1..12
+  }
+
+  function monthRange(y, m) {
+    const from = new Date(y, m-1, 1, 0,0,0,0).getTime();
+    const to = new Date(y, m, 0, 23,59,59,999).getTime();
+    return { from, to };
+  }
+
+  function getGeo() {
+    return new Promise((resolve) => {
+      if (!navigator.geolocation) {
+        resolve({ ok:false, err:"Geolocation není podporovaný." });
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        (pos) => resolve({
+          ok:true,
+          lat: pos.coords.latitude,
+          lon: pos.coords.longitude,
+          acc: pos.coords.accuracy
+        }),
+        (err) => resolve({ ok:false, err: err?.message || "GPS chyba" }),
+        { enableHighAccuracy:true, timeout: 12000, maximumAge: 0 }
+      );
+    });
+  }
+
+  async function log(type) {
+    btnArrival.disabled = btnDeparture.disabled = btnExport.disabled = true;
+    setStatus("ukládám…");
+
+    const ts = nowLocalTs();
+    const geo = await getGeo();
+
+    const events = loadEvents();
+    events.push({
+      id: crypto?.randomUUID ? crypto.randomUUID() : String(ts) + "_" + Math.random().toString(16).slice(2),
+      type, ts,
+      lat: geo.ok ? geo.lat : null,
+      lon: geo.ok ? geo.lon : null,
+      acc: geo.ok ? geo.acc : null
+    });
+    saveEvents(events);
+
+    setStatus(geo.ok ? "uloženo ✅ (s GPS)" : `uloženo ✅ (bez GPS: ${geo.err})`);
+    btnArrival.disabled = btnDeparture.disabled = btnExport.disabled = false;
+
+    renderAll();
+  }
+
+  function buildDailySummary(events, from, to) {
+    const monthEvents = events
+      .filter(e => e.ts >= from && e.ts <= to)
+      .slice()
+      .sort((a,b) => a.ts - b.ts);
+
+    const map = new Map(); // date -> {arrivals:[], departures:[]}
+    for (const e of monthEvents) {
+      const day = fmtDate(e.ts);
+      if (!map.has(day)) map.set(day, { arrivals: [], departures: [] });
+      const bucket = map.get(day);
+      if (e.type === "ARRIVAL") bucket.arrivals.push(e);
+      if (e.type === "DEPARTURE") bucket.departures.push(e);
+    }
+
+    const rows = [];
+    for (const [day, b] of Array.from(map.entries()).sort((a,b)=>a[0].localeCompare(b[0]))) {
+      const a = b.arrivals.length ? b.arrivals[0] : null;                 // první příchod
+      const d = b.departures.length ? b.departures[b.departures.length-1] : null; // poslední odchod
+      let workMin = null;
+      if (a && d && d.ts >= a.ts) workMin = Math.floor((d.ts - a.ts)/60000);
+      rows.push({ day, a, d, workMin });
+    }
+    return rows;
+  }
+
+  function hm(min) {
+    if (min == null) return "";
+    const h = Math.floor(min/60);
+    const m = min%60;
+    return `${h} h ${pad2(m)} m`;
+  }
+
+  function renderLogs(events) {
+    const last = events.slice().sort((a,b)=>b.ts-a.ts).slice(0, 30);
+    logTbody.innerHTML = last.map(e => {
+      const typ = e.type === "ARRIVAL" ? "Příchod" : "Odchod";
+      const gps = (e.lat != null && e.lon != null) ? `${e.lat.toFixed(6)}, ${e.lon.toFixed(6)}` : "—";
+      const acc = (e.acc != null) ? `${Math.round(e.acc)} m` : "—";
+      return `<tr>
+        <td>${typ}</td>
+        <td class="mono">${fmtDateTime(e.ts)}</td>
+        <td class="mono">${gps}</td>
+        <td>${acc}</td>
+      </tr>`;
+    }).join("");
+  }
+
+  function renderSummary(events) {
+    const sel = getSelectedMonth();
+    if (!sel) {
+      sumTbody.innerHTML = `<tr><td colspan="5" class="small">Vyber měsíc pro souhrn.</td></tr>`;
+      sumPill.textContent = "0 h 00 m";
+      return;
+    }
+    const { from, to } = monthRange(sel.y, sel.m);
+    const rows = buildDailySummary(events, from, to);
+
+    let totalMin = 0;
+    for (const r of rows) if (r.workMin != null) totalMin += r.workMin;
+
+    sumPill.textContent = hm(totalMin);
+
+    if (!rows.length) {
+      sumTbody.innerHTML = `<tr><td colspan="5" class="small">V tomhle měsíci zatím nic.</td></tr>`;
+      return;
+    }
+
+    sumTbody.innerHTML = rows.map(r => {
+      const aT = r.a ? fmtTime(r.a.ts) : "";
+      const dT = r.d ? fmtTime(r.d.ts) : "";
+      const gpsOk = (r.a && r.a.lat!=null) || (r.d && r.d.lat!=null);
+      const gpsBadge = gpsOk ? `<span class="ok">ano</span>` : `<span class="no">ne</span>`;
+      return `<tr>
+        <td class="mono">${r.day}</td>
+        <td class="mono">${aT}</td>
+        <td class="mono">${dT}</td>
+        <td>${hm(r.workMin)}</td>
+        <td>${gpsBadge}</td>
+      </tr>`;
+    }).join("");
+  }
+
+  function csvEscape(s, sep) {
+    const str = String(s ?? "");
+    const needs = str.includes(sep) || str.includes('"') || str.includes("\n");
+    const v = str.replaceAll('"','""');
+    return needs ? `"${v}"` : v;
+  }
+
+  function exportCsv() {
+    const events = loadEvents();
+    const sel = getSelectedMonth();
+    if (!sel) { alert("Vyber měsíc pro export."); return; }
+
+    const sep = sepPick.value || ",";
+    const { from, to } = monthRange(sel.y, sel.m);
+    const rows = buildDailySummary(events, from, to);
+
+    // CSV hlavička (Excel-friendly)
+    const head = ["date","arrival_time","arrival_lat","arrival_lon","departure_time","departure_lat","departure_lon","work_minutes","work_hm"];
+    const lines = [];
+    lines.push(head.join(sep));
+
+    for (const r of rows) {
+      const a = r.a, d = r.d;
+      const workHm = hm(r.workMin);
+      const row = [
+        r.day,
+        a ? fmtTime(a.ts) : "",
+        a?.lat ?? "",
+        a?.lon ?? "",
+        d ? fmtTime(d.ts) : "",
+        d?.lat ?? "",
+        d?.lon ?? "",
+        r.workMin ?? "",
+        workHm
+      ];
+      lines.push(row.map(x => csvEscape(x, sep)).join(sep));
+    }
+
+    // BOM pro Excel (UTF-8)
+    const csv = "\uFEFF" + lines.join("\n");
+    const blob = new Blob([csv], { type:"text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+
+    const fname = `dochazka_${sel.y}_${pad2(sel.m)}.csv`;
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fname;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+
+    setStatus("export hotovej ✅");
+  }
+
+  function renderAll() {
+    const events = loadEvents();
+    renderLogs(events);
+    renderSummary(events);
+  }
+
+  // init month default
+  const now = new Date();
+  monthPick.value = `${now.getFullYear()}-${pad2(now.getMonth()+1)}`;
+
+  btnArrival.addEventListener("click", () => log("ARRIVAL"));
+  btnDeparture.addEventListener("click", () => log("DEPARTURE"));
+  btnExport.addEventListener("click", exportCsv);
+  monthPick.addEventListener("change", renderAll);
+
+  btnClear.addEventListener("click", () => {
+    if (!confirm("Fakt smazat všechna data docházky v telefonu?")) return;
+    localStorage.removeItem(KEY);
+    setStatus("data smazána 🧼");
+    renderAll();
+  });
+
+  renderAll();
+})();
+</script>
+</body>
+</html>
