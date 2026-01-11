@@ -1,8 +1,9 @@
-const CACHE_NAME = "merch-log-v3"; // <-- když uděláš změny, zvedni číslo
+const CACHE_NAME = "merch-log-v4";
 const ASSETS = [
   "./",
   "./index.html",
-  "./manifest.webmanifest",
+  "./manifest.json",
+  "./sw.js",
   "./icon-192.png",
   "./icon-512.png"
 ];
@@ -17,7 +18,6 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("activate", (event) => {
   event.waitUntil((async () => {
-    // smaž staré cache
     const keys = await caches.keys();
     await Promise.all(
       keys
@@ -31,12 +31,13 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 
-  // Network-first pro index.html (ať update vždycky projde),
-  // cache-first pro ostatní soubory.
   const url = new URL(event.request.url);
-  const isIndex = url.pathname.endsWith("/dochazka/") || url.pathname.endsWith("/dochazka/index.html");
+  const isIndex =
+    url.pathname.endsWith("/dochazka/") ||
+    url.pathname.endsWith("/dochazka/index.html");
 
   event.respondWith((async () => {
+    // Index: network-first (kvůli update)
     if (isIndex) {
       try {
         const fresh = await fetch(event.request);
@@ -44,11 +45,11 @@ self.addEventListener("fetch", (event) => {
         cache.put(event.request, fresh.clone());
         return fresh;
       } catch {
-        const cached = await caches.match("./index.html");
-        return cached || new Response("Offline", { status: 200 });
+        return (await caches.match("./index.html")) || new Response("Offline", { status: 200 });
       }
     }
 
+    // Ostatní: cache-first
     const cached = await caches.match(event.request);
     if (cached) return cached;
 
@@ -58,7 +59,7 @@ self.addEventListener("fetch", (event) => {
       cache.put(event.request, resp.clone());
       return resp;
     } catch {
-      return caches.match("./index.html");
+      return (await caches.match("./index.html")) || new Response("Offline", { status: 200 });
     }
   })());
 });
