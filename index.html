@@ -3,186 +3,385 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Docházka</title>
-  <meta name="theme-color" content="#111827" />
+  <title>MERCHANDISER LOG</title>
+  <meta name="theme-color" content="#4f46e5" />
   <style>
-    :root { --bg:#0b1220; --card:#111827; --muted:#94a3b8; --text:#e5e7eb; --a:#22c55e; --b:#ef4444; --c:#38bdf8; --d:#f59e0b; }
-    *{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial}
-    body{margin:0;background:linear-gradient(180deg,#050814,#0b1220);color:var(--text)}
-    header{padding:16px 16px 8px}
-    h1{margin:0;font-size:20px}
-    p{margin:6px 0 0;color:var(--muted);font-size:13px}
-    .wrap{padding:16px;display:flex;flex-direction:column;gap:12px;max-width:720px;margin:0 auto}
-    .card{background:rgba(17,24,39,.92);border:1px solid rgba(148,163,184,.18);border-radius:16px;padding:12px}
-    .row{display:flex;gap:10px}
-    button{
-      border:0;border-radius:14px;padding:14px 12px;color:#0b1220;font-weight:700;
-      flex:1;cursor:pointer;transition:.15s transform;
+    :root{
+      --bg:#eef2f7;
+      --card:#ffffff;
+      --shadow:0 18px 40px rgba(15, 23, 42, .14);
+      --text:#0f172a;
+      --muted:#64748b;
+
+      --brand:#4f46e5;      /* fialová hlavička */
+      --brandDark:#4338ca;
+
+      --btnGreen:#16a34a;
+      --btnGreenDark:#15803d;
+
+      --btnGray:#9ca3af;
+      --btnGrayDark:#6b7280;
+
+      --btnNavy:#1f2937;
+      --btnNavyDark:#111827;
+
+      --pill:#1e293b;
+      --line:#e5e7eb;
+
+      --radius:18px;
     }
-    button:active{transform:scale(.99)}
-    .arr{background:var(--a)}
-    .dep{background:var(--b)}
-    .exp{background:var(--c);flex:1.2}
-    .danger{background:var(--d)}
-    .small{font-size:12px;color:var(--muted)}
-    label{font-size:12px;color:var(--muted)}
-    input,select{
-      width:100%;padding:10px 10px;border-radius:12px;border:1px solid rgba(148,163,184,.25);
-      background:#0b1220;color:var(--text);outline:none
+
+    *{ box-sizing:border-box; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+    body{
+      margin:0;
+      background: var(--bg);
+      color: var(--text);
+      display:flex;
+      justify-content:center;
+      padding:24px 14px;
     }
-    table{width:100%;border-collapse:collapse}
-    th,td{padding:8px 6px;border-bottom:1px solid rgba(148,163,184,.15);font-size:13px;vertical-align:top}
-    th{color:var(--muted);font-weight:600;text-align:left}
-    .pill{display:inline-block;padding:4px 8px;border-radius:999px;background:rgba(148,163,184,.12);font-size:12px;color:var(--muted)}
-    .ok{color:#86efac}
-    .no{color:#fca5a5}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+
+    .phone {
+      width: min(430px, 100%);
+    }
+
+    .card{
+      background: var(--card);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      border: 1px solid rgba(15,23,42,.06);
+    }
+
+    .header{
+      background: var(--brand);
+      padding: 22px 18px 18px;
+      text-align:center;
+      color:#fff;
+    }
+
+    .title{
+      font-weight: 900;
+      letter-spacing: .5px;
+      font-size: 22px;
+      margin:0 0 8px;
+    }
+
+    .now{
+      margin:0;
+      opacity:.95;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .pill{
+      display:inline-block;
+      margin-top: 12px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(15,23,42,.35);
+      border: 1px solid rgba(255,255,255,.25);
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: .25px;
+      text-transform: uppercase;
+    }
+
+    .content{
+      padding: 16px 18px 18px;
+    }
+
+    .sectionTitle{
+      font-size: 12px;
+      font-weight: 900;
+      color: #7c8697;
+      letter-spacing: 1px;
+      margin: 10px 2px 10px;
+      text-transform: uppercase;
+    }
+
+    .row{
+      display:flex;
+      gap: 14px;
+    }
+
+    .btn{
+      border:0;
+      border-radius: 12px;
+      padding: 14px 12px;
+      font-weight: 900;
+      font-size: 15px;
+      width:100%;
+      color:#fff;
+      cursor:pointer;
+      box-shadow: 0 10px 18px rgba(2,6,23,.10);
+      transition: transform .05s ease, filter .12s ease, opacity .12s ease;
+      user-select:none;
+    }
+    .btn:active{ transform: scale(.99); }
+    .btn[disabled]{ opacity:.45; cursor:not-allowed; box-shadow:none; }
+
+    .green{ background: var(--btnGreen); }
+    .green:hover{ filter: brightness(.98); }
+    .green:active{ background: var(--btnGreenDark); }
+
+    .gray{ background: var(--btnGray); }
+    .gray:active{ background: var(--btnGrayDark); }
+
+    .navy{ background: var(--btnNavy); }
+    .navy:active{ background: var(--btnNavyDark); }
+
+    .divider{
+      height:1px;
+      background: var(--line);
+      margin: 14px 0;
+    }
+
+    .fieldRow{
+      display:flex;
+      gap: 12px;
+      align-items:center;
+      margin-top: 6px;
+    }
+
+    .input{
+      width:100%;
+      border-radius: 12px;
+      border: 1px solid #d8dee9;
+      padding: 12px 12px;
+      font-size: 14px;
+      outline:none;
+      background:#fff;
+    }
+    .input:focus{
+      border-color: rgba(79,70,229,.45);
+      box-shadow: 0 0 0 3px rgba(79,70,229,.15);
+    }
+
+    .metaRow{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      justify-content:space-between;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .status{
+      padding: 10px 12px;
+      background: #f8fafc;
+      border: 1px solid #e7edf6;
+      border-radius: 14px;
+      font-size: 12px;
+      color: #334155;
+      font-weight: 700;
+    }
+
+    .activity{
+      margin-top: 10px;
+      padding-bottom: 6px;
+    }
+
+    .item{
+      border: 1px solid #e7edf6;
+      background: #fbfdff;
+      border-radius: 14px;
+      padding: 10px 12px;
+      margin-top: 8px;
+    }
+
+    .itemTop{
+      display:flex;
+      justify-content:space-between;
+      gap: 12px;
+      align-items:flex-start;
+    }
+
+    .tag{
+      font-weight: 900;
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(79,70,229,.10);
+      color: var(--brandDark);
+      white-space:nowrap;
+    }
+
+    .itemTitle{
+      font-weight: 900;
+      font-size: 14px;
+      margin:0;
+    }
+
+    .itemSub{
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .tiny{ font-size: 11px; color: var(--muted); font-weight: 700; }
+
+    .exportBar{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      margin-top: 8px;
+    }
+
+    .month{
+      width: 150px;
+      min-width: 150px;
+      border-radius: 12px;
+      border: 1px solid #d8dee9;
+      padding: 12px 10px;
+      font-weight: 800;
+      font-size: 13px;
+      background:#fff;
+      color: var(--text);
+      outline:none;
+    }
+
+    .icon{
+      display:inline-block;
+      transform: translateY(1px);
+      margin-right: 8px;
+    }
   </style>
 </head>
+
 <body>
-  <header>
-    <h1>Docházka 📍⏱️</h1>
-    <p>Jednoduchý log příchod/odchod + GPS. Data jsou jen v telefonu (local storage).</p>
-  </header>
-
-  <div class="wrap">
+  <div class="phone">
     <div class="card">
-      <div class="row">
-        <button class="arr" id="btnArrival">Příchod</button>
-        <button class="dep" id="btnDeparture">Odchod</button>
+      <div class="header">
+        <h1 class="title">MERCHANDISER LOG</h1>
+        <p class="now mono" id="nowText">--</p>
+        <div class="pill" id="modePill">MIMO PRACOVNÍ DOBU</div>
       </div>
-      <div style="height:10px"></div>
-      <div class="row">
-        <div style="flex:1">
-          <label>Měsíc pro export</label>
-          <input type="month" id="monthPick" />
-        </div>
-        <div style="flex:1">
-          <label>CSV oddělovač</label>
-          <select id="sepPick">
-            <option value=",">Čárka (comma)</option>
-            <option value=";">Středník (často lepší pro Excel CZ)</option>
-          </select>
-        </div>
-      </div>
-      <div style="height:10px"></div>
-      <div class="row">
-        <button class="exp" id="btnExport">Export CSV (měsíční přehled)</button>
-        <button class="danger" id="btnClear" title="Smaže všechna data v telefonu">Reset dat</button>
-      </div>
-      <div style="height:10px"></div>
-      <div class="small" id="status">Stav: připraveno.</div>
-    </div>
 
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
-        <div>
-          <div style="font-weight:700">Souhrn (vybraný měsíc)</div>
-          <div class="small">Páruje: první příchod + poslední odchod v daný den.</div>
+      <div class="content">
+        <div class="sectionTitle">PRACOVNÍ SMĚNA</div>
+        <div class="row">
+          <button class="btn green" id="btnShiftStart">PŘÍCHOD</button>
+          <button class="btn gray" id="btnShiftEnd">ODCHOD</button>
         </div>
-        <span class="pill" id="sumPill">0 h 00 m</span>
-      </div>
-      <div style="height:10px"></div>
-      <div style="overflow:auto">
-        <table id="summaryTbl">
-          <thead>
-            <tr>
-              <th>Datum</th>
-              <th>Příchod</th>
-              <th>Odchod</th>
-              <th>Práce</th>
-              <th>GPS</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </div>
 
-    <div class="card">
-      <div style="font-weight:700">Poslední záznamy</div>
-      <div class="small">Ukládá se: typ, čas, lat/lon, accuracy.</div>
-      <div style="height:10px"></div>
-      <div style="overflow:auto">
-        <table id="logTbl">
-          <thead>
-            <tr>
-              <th>Typ</th>
-              <th>Čas</th>
-              <th>Lat/Lon</th>
-              <th>Acc</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <div class="divider"></div>
+
+        <div class="sectionTitle">NÁVŠTĚVA PRODEJNY</div>
+
+        <div class="fieldRow">
+          <input class="input" id="storeName" placeholder="Název prodejny (např. Albert Anděl)" />
+        </div>
+
+        <div style="height:10px"></div>
+
+        <div class="row">
+          <button class="btn gray" id="btnStoreIn">VSTUP NA<br/>PRODEJNU</button>
+          <button class="btn gray" id="btnStoreOut">ODCHOD Z<br/>PRODEJNY</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="exportBar">
+          <button class="btn navy" id="btnExport">
+            <span class="icon">⬇</span>Stáhnout přehled (CSV)
+          </button>
+          <input class="month" id="monthPick" type="month" />
+        </div>
+
+        <div style="height:10px"></div>
+        <div class="status" id="status">Stav: připraveno.</div>
+
+        <div class="divider"></div>
+
+        <div class="sectionTitle">DNEŠNÍ AKTIVITA</div>
+        <div class="activity" id="activity"></div>
+
+        <div class="tiny">
+          Data jsou uložená jen v telefonu (localStorage). GPS funguje jen na HTTPS + s povolenou polohou.
+        </div>
       </div>
     </div>
   </div>
 
 <script>
 (() => {
-  const KEY = "dochazka_v1_events";
+  // ------------------ STORAGE MODEL ------------------
+  // localStorage KEY -> { days: { "YYYY-MM-DD": DayRecord } }
+  // DayRecord: {
+  //   shiftStart: {ts, lat, lon, acc} | null,
+  //   shiftEnd:   {ts, lat, lon, acc} | null,
+  //   visits: [ { storeName, in:{...}, out:{...}|null } ]
+  // }
 
-  const btnArrival = document.getElementById("btnArrival");
-  const btnDeparture = document.getElementById("btnDeparture");
+  const STORAGE_KEY = "merchandiser_log_v1";
+
+  const elNow = document.getElementById("nowText");
+  const elPill = document.getElementById("modePill");
+  const elStatus = document.getElementById("status");
+  const elActivity = document.getElementById("activity");
+
+  const btnShiftStart = document.getElementById("btnShiftStart");
+  const btnShiftEnd = document.getElementById("btnShiftEnd");
+  const btnStoreIn = document.getElementById("btnStoreIn");
+  const btnStoreOut = document.getElementById("btnStoreOut");
   const btnExport = document.getElementById("btnExport");
-  const btnClear = document.getElementById("btnClear");
-  const statusEl = document.getElementById("status");
+  const inpStore = document.getElementById("storeName");
   const monthPick = document.getElementById("monthPick");
-  const sepPick = document.getElementById("sepPick");
-  const logTbody = document.querySelector("#logTbl tbody");
-  const sumTbody = document.querySelector("#summaryTbl tbody");
-  const sumPill = document.getElementById("sumPill");
 
-  const pad2 = n => String(n).padStart(2, "0");
+  const pad2 = (n) => String(n).padStart(2, "0");
 
-  function nowLocalTs() { return Date.now(); }
-
-  function fmtDate(ts) {
+  function fmtDate(ts){
     const d = new Date(ts);
     return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
   }
-  function fmtTime(ts) {
+  function fmtTime(ts){
     const d = new Date(ts);
     return `${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`;
   }
-  function fmtDateTime(ts) { return `${fmtDate(ts)} ${fmtTime(ts)}`; }
+  function fmtDateTime(ts){ return `${fmtDate(ts)} ${fmtTime(ts)}`; }
 
-  function loadEvents() {
-    try {
-      const raw = localStorage.getItem(KEY);
-      if (!raw) return [];
-      const arr = JSON.parse(raw);
-      if (!Array.isArray(arr)) return [];
-      return arr;
-    } catch { return []; }
-  }
-  function saveEvents(arr) {
-    localStorage.setItem(KEY, JSON.stringify(arr));
+  function todayKey(){
+    const d = new Date();
+    return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
   }
 
-  function setStatus(msg, kind="") {
-    statusEl.textContent = `Stav: ${msg}`;
-    statusEl.className = "small " + kind;
+  function load(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return { days:{} };
+      const data = JSON.parse(raw);
+      if(!data || typeof data !== "object") return { days:{} };
+      if(!data.days || typeof data.days !== "object") data.days = {};
+      return data;
+    }catch{
+      return { days:{} };
+    }
+  }
+  function save(data){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }
 
-  function getSelectedMonth() {
-    const v = monthPick.value;
-    if (!v) return null;
-    const [y,m] = v.split("-").map(Number);
-    if (!y || !m) return null;
-    return { y, m }; // m: 1..12
+  function getDay(data, key){
+    if(!data.days[key]){
+      data.days[key] = { shiftStart:null, shiftEnd:null, visits:[] };
+    }
+    if(!Array.isArray(data.days[key].visits)) data.days[key].visits = [];
+    return data.days[key];
   }
 
-  function monthRange(y, m) {
-    const from = new Date(y, m-1, 1, 0,0,0,0).getTime();
-    const to = new Date(y, m, 0, 23,59,59,999).getTime();
-    return { from, to };
+  function setStatus(msg){
+    elStatus.textContent = "Stav: " + msg;
   }
 
-  function getGeo() {
+  // ------------------ GEO ------------------
+  function getGeo(){
     return new Promise((resolve) => {
-      if (!navigator.geolocation) {
+      if(!navigator.geolocation){
         resolve({ ok:false, err:"Geolocation není podporovaný." });
         return;
       }
@@ -199,156 +398,305 @@
     });
   }
 
-  async function log(type) {
-    btnArrival.disabled = btnDeparture.disabled = btnExport.disabled = true;
-    setStatus("ukládám…");
-
-    const ts = nowLocalTs();
+  async function capturePoint(){
+    const ts = Date.now();
     const geo = await getGeo();
-
-    const events = loadEvents();
-    events.push({
-      id: crypto?.randomUUID ? crypto.randomUUID() : String(ts) + "_" + Math.random().toString(16).slice(2),
-      type, ts,
+    return {
+      ts,
       lat: geo.ok ? geo.lat : null,
       lon: geo.ok ? geo.lon : null,
-      acc: geo.ok ? geo.acc : null
-    });
-    saveEvents(events);
-
-    setStatus(geo.ok ? "uloženo ✅ (s GPS)" : `uloženo ✅ (bez GPS: ${geo.err})`);
-    btnArrival.disabled = btnDeparture.disabled = btnExport.disabled = false;
-
-    renderAll();
+      acc: geo.ok ? geo.acc : null,
+      geoOk: geo.ok,
+      geoErr: geo.ok ? null : geo.err
+    };
   }
 
-  function buildDailySummary(events, from, to) {
-    const monthEvents = events
-      .filter(e => e.ts >= from && e.ts <= to)
-      .slice()
-      .sort((a,b) => a.ts - b.ts);
-
-    const map = new Map(); // date -> {arrivals:[], departures:[]}
-    for (const e of monthEvents) {
-      const day = fmtDate(e.ts);
-      if (!map.has(day)) map.set(day, { arrivals: [], departures: [] });
-      const bucket = map.get(day);
-      if (e.type === "ARRIVAL") bucket.arrivals.push(e);
-      if (e.type === "DEPARTURE") bucket.departures.push(e);
-    }
-
-    const rows = [];
-    for (const [day, b] of Array.from(map.entries()).sort((a,b)=>a[0].localeCompare(b[0]))) {
-      const a = b.arrivals.length ? b.arrivals[0] : null;                 // první příchod
-      const d = b.departures.length ? b.departures[b.departures.length-1] : null; // poslední odchod
-      let workMin = null;
-      if (a && d && d.ts >= a.ts) workMin = Math.floor((d.ts - a.ts)/60000);
-      rows.push({ day, a, d, workMin });
-    }
-    return rows;
+  // ------------------ STATE DERIVED ------------------
+  function isShiftActive(day){
+    return !!(day.shiftStart && !day.shiftEnd);
+  }
+  function activeVisit(day){
+    if(!day.visits.length) return null;
+    const last = day.visits[day.visits.length-1];
+    if(last && last.in && !last.out) return last;
+    return null;
   }
 
-  function hm(min) {
-    if (min == null) return "";
+  function minutesDiff(aTs, bTs){
+    if(aTs == null || bTs == null) return null;
+    if(bTs < aTs) return null;
+    return Math.floor((bTs - aTs) / 60000);
+  }
+  function hm(min){
+    if(min == null) return "";
     const h = Math.floor(min/60);
     const m = min%60;
     return `${h} h ${pad2(m)} m`;
   }
 
-  function renderLogs(events) {
-    const last = events.slice().sort((a,b)=>b.ts-a.ts).slice(0, 30);
-    logTbody.innerHTML = last.map(e => {
-      const typ = e.type === "ARRIVAL" ? "Příchod" : "Odchod";
-      const gps = (e.lat != null && e.lon != null) ? `${e.lat.toFixed(6)}, ${e.lon.toFixed(6)}` : "—";
-      const acc = (e.acc != null) ? `${Math.round(e.acc)} m` : "—";
-      return `<tr>
-        <td>${typ}</td>
-        <td class="mono">${fmtDateTime(e.ts)}</td>
-        <td class="mono">${gps}</td>
-        <td>${acc}</td>
-      </tr>`;
-    }).join("");
-  }
+  // ------------------ ACTIONS ------------------
+  async function startShift(){
+    const data = load();
+    const day = getDay(data, todayKey());
 
-  function renderSummary(events) {
-    const sel = getSelectedMonth();
-    if (!sel) {
-      sumTbody.innerHTML = `<tr><td colspan="5" class="small">Vyber měsíc pro souhrn.</td></tr>`;
-      sumPill.textContent = "0 h 00 m";
+    if(isShiftActive(day)){
+      setStatus("už jsi ve směně.");
       return;
     }
-    const { from, to } = monthRange(sel.y, sel.m);
-    const rows = buildDailySummary(events, from, to);
-
-    let totalMin = 0;
-    for (const r of rows) if (r.workMin != null) totalMin += r.workMin;
-
-    sumPill.textContent = hm(totalMin);
-
-    if (!rows.length) {
-      sumTbody.innerHTML = `<tr><td colspan="5" class="small">V tomhle měsíci zatím nic.</td></tr>`;
+    if(day.shiftStart && day.shiftEnd){
+      // nový shift stejný den? necháme to jako 1 směnu/den (typicky docházka).
+      // když chceš více směn, dá se to rozšířit – zatím radši zabráníme chaosu.
+      alert("Dnešní směna už je uzavřená. Pokud potřebuješ druhou směnu v jednom dni, řekni a rozšíříme logiku.");
       return;
     }
 
-    sumTbody.innerHTML = rows.map(r => {
-      const aT = r.a ? fmtTime(r.a.ts) : "";
-      const dT = r.d ? fmtTime(r.d.ts) : "";
-      const gpsOk = (r.a && r.a.lat!=null) || (r.d && r.d.lat!=null);
-      const gpsBadge = gpsOk ? `<span class="ok">ano</span>` : `<span class="no">ne</span>`;
-      return `<tr>
-        <td class="mono">${r.day}</td>
-        <td class="mono">${aT}</td>
-        <td class="mono">${dT}</td>
-        <td>${hm(r.workMin)}</td>
-        <td>${gpsBadge}</td>
-      </tr>`;
-    }).join("");
+    lockUI(true);
+    setStatus("ukládám příchod…");
+
+    const p = await capturePoint();
+    day.shiftStart = { ts:p.ts, lat:p.lat, lon:p.lon, acc:p.acc };
+    save(data);
+
+    setStatus(p.geoOk ? "příchod uložen ✅ (s GPS)" : `příchod uložen ✅ (bez GPS: ${p.geoErr})`);
+    lockUI(false);
+    render();
   }
 
-  function csvEscape(s, sep) {
-    const str = String(s ?? "");
-    const needs = str.includes(sep) || str.includes('"') || str.includes("\n");
-    const v = str.replaceAll('"','""');
+  async function endShift(){
+    const data = load();
+    const day = getDay(data, todayKey());
+
+    if(!isShiftActive(day)){
+      setStatus("směna není aktivní.");
+      return;
+    }
+    if(activeVisit(day)){
+      alert("Nejdřív ukonči návštěvu prodejny (odchod z prodejny).");
+      return;
+    }
+
+    lockUI(true);
+    setStatus("ukládám odchod…");
+
+    const p = await capturePoint();
+    day.shiftEnd = { ts:p.ts, lat:p.lat, lon:p.lon, acc:p.acc };
+    save(data);
+
+    setStatus(p.geoOk ? "odchod uložen ✅ (s GPS)" : `odchod uložen ✅ (bez GPS: ${p.geoErr})`);
+    lockUI(false);
+    render();
+  }
+
+  async function storeIn(){
+    const name = (inpStore.value || "").trim();
+    if(!name){
+      alert("Zadej název prodejny.");
+      inpStore.focus();
+      return;
+    }
+
+    const data = load();
+    const day = getDay(data, todayKey());
+
+    if(!isShiftActive(day)){
+      alert("Nejdřív zahaj směnu (Příchod).");
+      return;
+    }
+    if(activeVisit(day)){
+      alert("Už máš aktivní návštěvu. Nejdřív dej odchod z prodejny.");
+      return;
+    }
+
+    lockUI(true);
+    setStatus("ukládám vstup na prodejnu…");
+
+    const p = await capturePoint();
+    day.visits.push({
+      storeName: name,
+      in: { ts:p.ts, lat:p.lat, lon:p.lon, acc:p.acc },
+      out: null
+    });
+    save(data);
+
+    setStatus(p.geoOk ? "vstup uložen ✅ (s GPS)" : `vstup uložen ✅ (bez GPS: ${p.geoErr})`);
+    lockUI(false);
+    render();
+  }
+
+  async function storeOut(){
+    const data = load();
+    const day = getDay(data, todayKey());
+
+    if(!isShiftActive(day)){
+      alert("Nejdřív zahaj směnu (Příchod).");
+      return;
+    }
+
+    const v = activeVisit(day);
+    if(!v){
+      alert("Žádná aktivní návštěva není otevřená.");
+      return;
+    }
+
+    lockUI(true);
+    setStatus("ukládám odchod z prodejny…");
+
+    const p = await capturePoint();
+    v.out = { ts:p.ts, lat:p.lat, lon:p.lon, acc:p.acc };
+    save(data);
+
+    setStatus(p.geoOk ? "odchod z prodejny uložen ✅ (s GPS)" : `odchod z prodejny uložen ✅ (bez GPS: ${p.geoErr})`);
+    lockUI(false);
+    render();
+  }
+
+  function lockUI(lock){
+    btnShiftStart.disabled = lock;
+    btnShiftEnd.disabled = lock;
+    btnStoreIn.disabled = lock;
+    btnStoreOut.disabled = lock;
+    btnExport.disabled = lock;
+    inpStore.disabled = lock;
+    monthPick.disabled = lock;
+  }
+
+  // ------------------ EXPORT CSV ------------------
+  function monthRange(y, m){
+    const from = new Date(y, m-1, 1, 0,0,0,0).getTime();
+    const to = new Date(y, m, 0, 23,59,59,999).getTime();
+    return { from, to };
+  }
+
+  function parseMonthValue(v){
+    if(!v) return null;
+    const [y,m] = v.split("-").map(Number);
+    if(!y || !m) return null;
+    return { y, m };
+  }
+
+  function csvEscape(value, sep){
+    const s = String(value ?? "");
+    const needs = s.includes(sep) || s.includes('"') || s.includes("\n");
+    const v = s.replaceAll('"','""');
     return needs ? `"${v}"` : v;
   }
 
-  function exportCsv() {
-    const events = loadEvents();
-    const sel = getSelectedMonth();
-    if (!sel) { alert("Vyber měsíc pro export."); return; }
+  function exportCsv(){
+    const data = load();
+    const sel = parseMonthValue(monthPick.value);
+    if(!sel){
+      alert("Vyber měsíc pro export.");
+      return;
+    }
 
-    const sep = sepPick.value || ",";
+    const sep = ","; // chceš xlsx friendly – čárka; (když budeš chtít ; pro CZ Excel, řekni a přepnu)
     const { from, to } = monthRange(sel.y, sel.m);
-    const rows = buildDailySummary(events, from, to);
 
-    // CSV hlavička (Excel-friendly)
-    const head = ["date","arrival_time","arrival_lat","arrival_lon","departure_time","departure_lat","departure_lon","work_minutes","work_hm"];
+    // vyber dny v rozsahu
+    const dayKeys = Object.keys(data.days || {})
+      .filter(k => {
+        // k je YYYY-MM-DD, vytvoříme timestamp na začátku dne
+        const [yy,mm,dd] = k.split("-").map(Number);
+        if(!yy || !mm || !dd) return false;
+        const ts = new Date(yy, mm-1, dd, 12,0,0,0).getTime(); // poledne kvůli DST
+        return ts >= from && ts <= to;
+      })
+      .sort((a,b) => a.localeCompare(b));
+
+    const head = [
+      "row_type",
+      "date",
+      "shift_start",
+      "shift_start_lat",
+      "shift_start_lon",
+      "shift_end",
+      "shift_end_lat",
+      "shift_end_lon",
+      "work_minutes",
+      "visit_count",
+      "visit_index",
+      "store_name",
+      "store_in",
+      "store_in_lat",
+      "store_in_lon",
+      "store_out",
+      "store_out_lat",
+      "store_out_lon",
+      "visit_minutes"
+    ];
+
     const lines = [];
     lines.push(head.join(sep));
 
-    for (const r of rows) {
-      const a = r.a, d = r.d;
-      const workHm = hm(r.workMin);
-      const row = [
-        r.day,
-        a ? fmtTime(a.ts) : "",
-        a?.lat ?? "",
-        a?.lon ?? "",
-        d ? fmtTime(d.ts) : "",
-        d?.lat ?? "",
-        d?.lon ?? "",
-        r.workMin ?? "",
-        workHm
-      ];
-      lines.push(row.map(x => csvEscape(x, sep)).join(sep));
+    for(const dk of dayKeys){
+      const day = getDay(data, dk);
+      const visitCount = (day.visits || []).length;
+
+      const shiftStartTs = day.shiftStart?.ts ?? null;
+      const shiftEndTs = day.shiftEnd?.ts ?? null;
+      const workMin = (shiftStartTs && shiftEndTs) ? minutesDiff(shiftStartTs, shiftEndTs) : null;
+
+      // 1) řádek dne – souhrn
+      lines.push([
+        "DAY_TOTAL",
+        dk,
+        shiftStartTs ? fmtDateTime(shiftStartTs) : "",
+        day.shiftStart?.lat ?? "",
+        day.shiftStart?.lon ?? "",
+        shiftEndTs ? fmtDateTime(shiftEndTs) : "",
+        day.shiftEnd?.lat ?? "",
+        day.shiftEnd?.lon ?? "",
+        workMin ?? "",
+        visitCount,
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ].map(x => csvEscape(x, sep)).join(sep));
+
+      // 2) řádky návštěv
+      for(let i=0; i<visitCount; i++){
+        const v = day.visits[i];
+        const vInTs = v?.in?.ts ?? null;
+        const vOutTs = v?.out?.ts ?? null;
+        const vMin = (vInTs && vOutTs) ? minutesDiff(vInTs, vOutTs) : null;
+
+        lines.push([
+          "VISIT",
+          dk,
+          shiftStartTs ? fmtDateTime(shiftStartTs) : "",
+          day.shiftStart?.lat ?? "",
+          day.shiftStart?.lon ?? "",
+          shiftEndTs ? fmtDateTime(shiftEndTs) : "",
+          day.shiftEnd?.lat ?? "",
+          day.shiftEnd?.lon ?? "",
+          workMin ?? "",
+          visitCount,
+          (i+1),
+          v?.storeName ?? "",
+          vInTs ? fmtDateTime(vInTs) : "",
+          v?.in?.lat ?? "",
+          v?.in?.lon ?? "",
+          vOutTs ? fmtDateTime(vOutTs) : "",
+          v?.out?.lat ?? "",
+          v?.out?.lon ?? "",
+          vMin ?? ""
+        ].map(x => csvEscape(x, sep)).join(sep));
+      }
+
+      // když nejsou návštěvy, necháme jen DAY_TOTAL (to je ok)
     }
 
-    // BOM pro Excel (UTF-8)
-    const csv = "\uFEFF" + lines.join("\n");
+    const csv = "\uFEFF" + lines.join("\n"); // BOM pro Excel (UTF-8)
     const blob = new Blob([csv], { type:"text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
 
-    const fname = `dochazka_${sel.y}_${pad2(sel.m)}.csv`;
+    const fname = `merchandiser_log_${sel.y}_${pad2(sel.m)}.csv`;
     const a = document.createElement("a");
     a.href = url;
     a.download = fname;
@@ -360,29 +708,127 @@
     setStatus("export hotovej ✅");
   }
 
-  function renderAll() {
-    const events = loadEvents();
-    renderLogs(events);
-    renderSummary(events);
+  // ------------------ RENDER ------------------
+  function updateNow(){
+    const d = new Date();
+    elNow.textContent = `${d.getDate()}. ${d.getMonth()+1}. ${d.getFullYear()}  ${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`;
   }
 
-  // init month default
-  const now = new Date();
-  monthPick.value = `${now.getFullYear()}-${pad2(now.getMonth()+1)}`;
+  function render(){
+    updateNow();
 
-  btnArrival.addEventListener("click", () => log("ARRIVAL"));
-  btnDeparture.addEventListener("click", () => log("DEPARTURE"));
+    const data = load();
+    const day = getDay(data, todayKey());
+    const shiftActive = isShiftActive(day);
+    const vActive = activeVisit(day);
+
+    // pill mode
+    if(!shiftActive){
+      elPill.textContent = "MIMO PRACOVNÍ DOBU";
+    } else if(shiftActive && vActive){
+      elPill.textContent = "NA PRODEJNĚ";
+    } else {
+      elPill.textContent = "VE SMĚNĚ";
+    }
+
+    // buttons state
+    btnShiftStart.classList.toggle("green", !shiftActive && !day.shiftStart);
+    btnShiftStart.classList.toggle("gray", shiftActive || !!day.shiftStart);
+    btnShiftStart.disabled = shiftActive || !!day.shiftStart;
+
+    btnShiftEnd.disabled = !shiftActive;
+    btnShiftEnd.classList.toggle("gray", true);
+
+    // store buttons
+    const canStore = shiftActive;
+    btnStoreIn.disabled = !canStore || !!vActive;
+    btnStoreOut.disabled = !canStore || !vActive;
+
+    // input lock during active visit
+    inpStore.disabled = !!vActive ? true : false;
+    if(vActive) inpStore.value = vActive.storeName || inpStore.value;
+
+    // activity view
+    const items = [];
+
+    if(day.shiftStart){
+      items.push({
+        tag:"SMĚNA",
+        title:"Příchod",
+        sub: `${fmtDateTime(day.shiftStart.ts)} • GPS: ${gpsText(day.shiftStart)}`
+      });
+    }
+    if(day.visits?.length){
+      day.visits.forEach((v, idx) => {
+        const inTs = v?.in?.ts;
+        const outTs = v?.out?.ts;
+        const dur = (inTs && outTs) ? hm(minutesDiff(inTs, outTs)) : (inTs ? "probíhá…" : "");
+        items.push({
+          tag:`PRODEJNA #${idx+1}`,
+          title: v.storeName || "(bez názvu)",
+          sub: `${inTs ? fmtDateTime(inTs) : "—"} → ${outTs ? fmtDateTime(outTs) : "—"} • ${dur}`
+        });
+      });
+    }
+    if(day.shiftEnd){
+      const workMin = minutesDiff(day.shiftStart?.ts ?? null, day.shiftEnd.ts);
+      items.push({
+        tag:"SMĚNA",
+        title:"Odchod",
+        sub: `${fmtDateTime(day.shiftEnd.ts)} • Celkem práce: ${hm(workMin)}`
+      });
+    }
+
+    if(!items.length){
+      elActivity.innerHTML = `<div class="tiny">Zatím nic. Zahaj směnu (Příchod).</div>`;
+    } else {
+      elActivity.innerHTML = items.map(it => `
+        <div class="item">
+          <div class="itemTop">
+            <div>
+              <p class="itemTitle">${escapeHtml(it.title)}</p>
+              <p class="itemSub mono">${escapeHtml(it.sub)}</p>
+            </div>
+            <div class="tag">${escapeHtml(it.tag)}</div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    // měsíční picker default (když je prázdný)
+    if(!monthPick.value){
+      const n = new Date();
+      monthPick.value = `${n.getFullYear()}-${pad2(n.getMonth()+1)}`;
+    }
+  }
+
+  function gpsText(p){
+    const has = (p.lat != null && p.lon != null);
+    if(!has) return "bez GPS";
+    const acc = (p.acc != null) ? `±${Math.round(p.acc)}m` : "±?";
+    return `${p.lat.toFixed(6)}, ${p.lon.toFixed(6)} (${acc})`;
+  }
+
+  function escapeHtml(s){
+    return String(s ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;");
+  }
+
+  // ------------------ WIRE UP ------------------
+  btnShiftStart.addEventListener("click", startShift);
+  btnShiftEnd.addEventListener("click", endShift);
+  btnStoreIn.addEventListener("click", storeIn);
+  btnStoreOut.addEventListener("click", storeOut);
   btnExport.addEventListener("click", exportCsv);
-  monthPick.addEventListener("change", renderAll);
+  monthPick.addEventListener("change", () => setStatus("měsíc vybrán."));
 
-  btnClear.addEventListener("click", () => {
-    if (!confirm("Fakt smazat všechna data docházky v telefonu?")) return;
-    localStorage.removeItem(KEY);
-    setStatus("data smazána 🧼");
-    renderAll();
-  });
+  // tick
+  render();
+  setInterval(updateNow, 1000);
 
-  renderAll();
 })();
 </script>
 </body>
