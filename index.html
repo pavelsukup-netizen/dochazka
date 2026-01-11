@@ -833,14 +833,31 @@
 
 })();
 </script>
-  <script>
+ <script>
   if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./sw.js").catch(() => {});
+    window.addEventListener("load", async () => {
+      try {
+        const reg = await navigator.serviceWorker.register("./sw.js");
+        // zkus vynutit update
+        reg.update();
+
+        // když přijde nová verze SW, reloadni appku
+        reg.addEventListener("updatefound", () => {
+          const newWorker = reg.installing;
+          if (!newWorker) return;
+          newWorker.addEventListener("statechange", () => {
+            if (newWorker.state === "activated") {
+              location.reload();
+            }
+          });
+        });
+      } catch (e) {}
     });
   }
 </script>
 
+
 </body>
 </html>
+
 
