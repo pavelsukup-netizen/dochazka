@@ -1,4 +1,4 @@
-const CACHE_NAME = "merch-log-v1";
+const CACHE_NAME = "merch-log-v3"; // <-- když uděláš změny, zvedni číslo
 const ASSETS = [
   "./",
   "./index.html",
@@ -16,23 +16,49 @@ self.addEventListener("install", (event) => {
 });
 
 self.addEventListener("activate", (event) => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil((async () => {
+    // smaž staré cache
+    const keys = await caches.keys();
+    await Promise.all(
+      keys
+        .filter(k => k.startsWith("merch-log-") && k !== CACHE_NAME)
+        .map(k => caches.delete(k))
+    );
+    await self.clients.claim();
+  })());
 });
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 
-  event.respondWith(
-    caches.match(event.request).then((cached) => {
-      if (cached) return cached;
+  // Network-first pro index.html (ať update vždycky projde),
+  // cache-first pro ostatní soubory.
+  const url = new URL(event.request.url);
+  const isIndex = url.pathname.endsWith("/dochazka/") || url.pathname.endsWith("/dochazka/index.html");
 
-      return fetch(event.request)
-        .then((resp) => {
-          const copy = resp.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
-          return resp;
-        })
-        .catch(() => caches.match("./index.html"));
-    })
-  );
+  event.respondWith((async () => {
+    if (isIndex) {
+      try {
+        const fresh = await fetch(event.request);
+        const cache = await caches.open(CACHE_NAME);
+        cache.put(event.request, fresh.clone());
+        return fresh;
+      } catch {
+        const cached = await caches.match("./index.html");
+        return cached || new Response("Offline", { status: 200 });
+      }
+    }
+
+    const cached = await caches.match(event.request);
+    if (cached) return cached;
+
+    try {
+      const resp = await fetch(event.request);
+      const cache = await caches.open(CACHE_NAME);
+      cache.put(event.request, resp.clone());
+      return resp;
+    } catch {
+      return caches.match("./index.html");
+    }
+  })());
 });
