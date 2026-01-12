@@ -2,7 +2,7 @@ const CACHE_NAME = "merch-log-v4";
 const ASSETS = [
   "./",
   "./index.html",
-  "./manifest.json",
+  "./manifest.webmanifest",
   "./sw.js",
   "./icon-192.png",
   "./icon-512.png"
