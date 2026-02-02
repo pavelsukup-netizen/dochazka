@@ -1,4 +1,4 @@
-const CACHE_NAME = "merch-log-v4";
+const CACHE_NAME = "merch-log-v5";
 const ASSETS = [
   "./",
   "./index.html",
@@ -37,7 +37,7 @@ self.addEventListener("fetch", (event) => {
     url.pathname.endsWith("/dochazka/index.html");
 
   event.respondWith((async () => {
-    // Index: network-first (kvůli update)
+    // Index: network-first kvůli update
     if (isIndex) {
       try {
         const fresh = await fetch(event.request);
@@ -49,7 +49,7 @@ self.addEventListener("fetch", (event) => {
       }
     }
 
-    // Ostatní: cache-first
+    // ostatní: cache-first
     const cached = await caches.match(event.request);
     if (cached) return cached;
 
